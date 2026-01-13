@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function index() {
+export default function settings() {
   return (
-    <View className="bg-blue-400 flex-1">
-      <Text className="text-4xl">Hello world</Text>
+    <View>
+      <Text>settings</Text>
     </View>
   );
 }

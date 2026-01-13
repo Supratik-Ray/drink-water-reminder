@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-export default function Modal() {
+export default function report() {
   return (
     <View>
-      <Text>Modal</Text>
+      <Text>report</Text>
     </View>
   );
 }
