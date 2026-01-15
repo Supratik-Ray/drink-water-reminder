@@ -1,16 +1,16 @@
+import MascotImage from "@/components/onboarding/MascotImage";
 import OnboardingSubtitle from "@/components/onboarding/OnboardingSubtitle";
 import OnboardingTitle from "@/components/onboarding/OnboardingTitle";
 import PrimaryButton from "@/components/UI/PrimaryButton";
 import Screen from "@/components/UI/Screen";
 import { router } from "expo-router";
-import { Image } from "react-native";
 
 const mascotImage = require("../../assets/images/mascot/first.png");
 
 export default function index() {
   return (
     <Screen className="justify-center items-center">
-      <Image source={mascotImage} className="w-[150px] h-[300px]" />
+      <MascotImage path={mascotImage} />
       <OnboardingTitle className="mb-4">
         Stay hydrated, effortlessly.
       </OnboardingTitle>

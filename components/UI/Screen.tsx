@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import { View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
 type ScreenProps = {
   children: React.ReactNode;
@@ -8,8 +8,13 @@ type ScreenProps = {
 
 export default function Screen({ children, className }: ScreenProps) {
   return (
-    <View className={cn("flex-1 bg-background p-16", className)}>
-      {children}
-    </View>
+    <ScrollView className="bg-background" contentContainerClassName="flex-1">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1"
+      >
+        <View className={cn("flex-1 p-16", className)}>{children}</View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
