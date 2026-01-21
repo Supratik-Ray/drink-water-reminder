@@ -14,7 +14,9 @@ export default function Weight() {
     <Screen className="justify-center items-center relative">
       <BackButton />
       <MascotImage path={mascotImage} />
-      <OnboardingTitle className="mb-4">What’s your weight?</OnboardingTitle>
+      <OnboardingTitle className="mb-4">
+        What’s your weight in Kg?
+      </OnboardingTitle>
       <OnboardingSubtitle className="mb-4">
         This helps us calculate how much water your body needs each day.
       </OnboardingSubtitle>
@@ -24,7 +26,10 @@ export default function Weight() {
         placeholderTextColor="#94A3B8"
         className="bg-surface text-white p-4 rounded-md border border-primary/50 w-full mb-8"
       />
-      <PrimaryButton onPress={() => router.push("/(onboarding)/height")}>
+      <PrimaryButton
+        onPress={() => router.push("/(onboarding)/schedule")}
+        className="w-full absolute bottom-20"
+      >
         Next
       </PrimaryButton>
     </Screen>

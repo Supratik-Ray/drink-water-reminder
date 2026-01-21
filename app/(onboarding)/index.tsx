@@ -18,7 +18,10 @@ export default function index() {
         We’ll set up a simple plan based on your body and daily routine. It
         takes less than a minute.
       </OnboardingSubtitle>
-      <PrimaryButton onPress={() => router.push("/(onboarding)/weight")}>
+      <PrimaryButton
+        onPress={() => router.push("/(onboarding)/weight")}
+        className="w-full absolute bottom-20"
+      >
         Start setup →
       </PrimaryButton>
     </Screen>
