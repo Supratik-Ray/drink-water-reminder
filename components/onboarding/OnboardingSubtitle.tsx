@@ -11,6 +11,6 @@ export default function OnboardingSubtitle({
   className,
 }: OnboardingSubtitleProp) {
   return (
-    <Text className={cn("text-lg text-muted", className)}>{children}</Text>
+    <Text className={cn("text-lg text-muted ", className)}>{children}</Text>
   );
 }

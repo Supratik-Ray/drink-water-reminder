@@ -12,7 +12,7 @@ export default function Screen({ children, className }: ScreenProps) {
       behavior={Platform.OS === "android" ? "padding" : "height"}
       className="flex-1 bg-background"
     >
-      <View className={cn("flex-1 p-10", className)}>{children}</View>
+      <View className={cn("flex-1", className)}>{children}</View>
     </KeyboardAvoidingView>
   );
 }

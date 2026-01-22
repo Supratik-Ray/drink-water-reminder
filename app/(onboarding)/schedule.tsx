@@ -1,10 +1,12 @@
 import BackButton from "@/components/onboarding/BackButton";
 import MascotImage from "@/components/onboarding/MascotImage";
+import OnboardingScreenLayout from "@/components/onboarding/OnboardingScreenLayout";
 import OnboardingSubtitle from "@/components/onboarding/OnboardingSubtitle";
 import OnboardingTitle from "@/components/onboarding/OnboardingTitle";
 import TimeField from "@/components/onboarding/TimeField";
-import PrimaryButton from "@/components/UI/PrimaryButton";
-import Screen from "@/components/UI/Screen";
+import { changeSchedule } from "@/store/features/user-preference";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { dateToTimeString, timeStringToDate } from "@/utils/time";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -14,27 +16,32 @@ const mascotImage = require("../../assets/images/mascot/schedule.png");
 
 export default function Schedule() {
   const [pickerType, setPickerType] = useState<null | "wake" | "sleep">(null);
-  const [wakeUpTime, setWakeUpTime] = useState(() => {
-    const date = new Date();
-    date.setHours(9, 0, 0, 0);
-    return date;
-  });
 
-  const [sleepTime, setSleepTime] = useState(() => {
-    const date = new Date();
-    date.setHours(23, 0, 0, 0);
-    return date;
-  });
+  const {
+    schedule: { wakeUpTime, sleepTime },
+  } = useAppSelector((state) => state.userPreference);
+
+  const dispatch = useAppDispatch();
+
+  const wakeUpTimeObj = timeStringToDate(wakeUpTime);
+  const sleepTimeObj = timeStringToDate(sleepTime);
 
   const onChange = (_: DateTimePickerEvent, selected: Date | undefined) => {
     setPickerType(null);
     if (!selected) return;
 
-    pickerType === "wake" ? setWakeUpTime(selected) : setSleepTime(selected);
+    if (!pickerType) return;
+
+    dispatch(
+      changeSchedule({
+        field: pickerType === "wake" ? "wakeUpTime" : "sleepTime",
+        time: dateToTimeString(selected),
+      }),
+    );
   };
 
   return (
-    <Screen className="justify-center items-center">
+    <OnboardingScreenLayout nextScreen={"/(onboarding)/last"}>
       <BackButton />
       <MascotImage path={mascotImage} />
       <OnboardingTitle className="mb-4">When are you awake?</OnboardingTitle>
@@ -44,26 +51,24 @@ export default function Schedule() {
 
       <TimeField
         label="Wake-up Time"
-        time={wakeUpTime}
+        time={wakeUpTimeObj}
         onPress={() => setPickerType("wake")}
       />
 
       <TimeField
         label="Sleeping Time"
-        time={sleepTime}
+        time={sleepTimeObj}
         onPress={() => setPickerType("sleep")}
       />
 
       {pickerType && (
         <DateTimePicker
-          value={pickerType === "wake" ? wakeUpTime : sleepTime}
+          value={pickerType === "wake" ? wakeUpTimeObj : sleepTimeObj}
           mode="time"
           display="default"
           onChange={onChange}
         />
       )}
-
-      <PrimaryButton className="w-full absolute bottom-20">Next</PrimaryButton>
-    </Screen>
+    </OnboardingScreenLayout>
   );
 }

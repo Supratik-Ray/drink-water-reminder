@@ -7,7 +7,7 @@ export default function BackButton() {
   return (
     <Pressable
       onPress={() => router.back()}
-      className="absolute top-20 left-10 bg-surface px-8 py-4 rounded-full elevation-md"
+      className="absolute top-16 left-8 bg-surface px-8 py-4 rounded-full elevation-md"
     >
       <Ionicons name="chevron-back" size={20} color="white" />
     </Pressable>
