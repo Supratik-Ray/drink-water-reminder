@@ -1,11 +1,12 @@
+import Screen from "@/components/UI/Screen";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 
 export default function settings() {
   return (
-    <View>
+    <Screen>
       <Text>settings</Text>
-    </View>
+    </Screen>
   );
 }
 

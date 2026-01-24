@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
+import Screen from "@/components/UI/Screen";
 import React from "react";
+import { StyleSheet, Text } from "react-native";
 
 export default function report() {
   return (
-    <View>
+    <Screen>
       <Text>report</Text>
-    </View>
+    </Screen>
   );
 }
 
