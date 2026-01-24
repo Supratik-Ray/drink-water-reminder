@@ -18,6 +18,9 @@ const userPreferenceSlice = createSlice({
   name: "userPreference",
   initialState,
   reducers: {
+    initState: (state, action: PayloadAction<userPreferenceState>) => {
+      state = action.payload;
+    },
     changeUnits: (
       state,
       action: PayloadAction<{
@@ -53,6 +56,7 @@ const userPreferenceSlice = createSlice({
 });
 
 export const {
+  initState,
   changeUnits,
   changeSchedule,
   changeWeight,

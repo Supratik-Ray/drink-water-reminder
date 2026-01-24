@@ -26,7 +26,7 @@ export default function Units() {
       <BackButton />
       <MascotImage path={mascotImage} />
       <OnboardingTitle className="mb-4">Choose your units</OnboardingTitle>
-      <OnboardingSubtitle className="mb-8">
+      <OnboardingSubtitle className="mb-12 text-center">
         Pick what feels natural to you. You can change this later.
       </OnboardingSubtitle>
 
@@ -35,7 +35,7 @@ export default function Units() {
           selected={units.water === "ml"}
           onPress={() => onUnitChange("water", "ml")}
         >
-          mL
+          ml
         </SelectorButton>
         <SelectorButton
           selected={units.water === "oz"}

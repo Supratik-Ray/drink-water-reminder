@@ -1,11 +1,12 @@
+import Screen from "@/components/UI/Screen";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 
 export default function index() {
   return (
-    <View className="bg-blue-400 flex-1">
-      <Text className="text-4xl">Hello world</Text>
-    </View>
+    <Screen className="p-10">
+      <Text className="text-4xl text-primary">Hello world</Text>
+    </Screen>
   );
 }
 

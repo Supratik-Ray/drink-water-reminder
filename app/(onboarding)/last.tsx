@@ -3,21 +3,55 @@ import MascotImage from "@/components/onboarding/MascotImage";
 import OnboardingScreenLayout from "@/components/onboarding/OnboardingScreenLayout";
 import OnboardingSubtitle from "@/components/onboarding/OnboardingSubtitle";
 import OnboardingTitle from "@/components/onboarding/OnboardingTitle";
-import { useAppSelector } from "@/store/hooks";
+import { addWaterIntakeAmount } from "@/store/features/user-preference";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { calculateDailyWaterIntake } from "@/utils/daily-intake-amount";
-import { Text, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
 
 const mascotImage = require("../../assets/images/mascot/last.png");
 
 export default function Last() {
-  const { units, weight } = useAppSelector((state) => state.userPreference);
-  const dailyIntakeAmount = calculateDailyWaterIntake({
+  const { units, weight, schedule } = useAppSelector(
+    (state) => state.userPreference,
+  );
+  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
+  const dailyWaterIntakeAmount = calculateDailyWaterIntake({
     waterUnit: units.water,
     weightUnit: units.weight,
     weight: Number(weight),
   });
+
+  useEffect(() => {
+    new Promise((resolve) => setTimeout(resolve, 2000)).then(() => {
+      setLoading(false);
+      dispatch(addWaterIntakeAmount(dailyWaterIntakeAmount));
+    });
+  }, []);
+
+  async function saveUserPreferences() {
+    try {
+      const jsonData = JSON.stringify({
+        units,
+        weight,
+        schedule,
+        dailyWaterIntakeAmount,
+      });
+      AsyncStorage.setItem("user-preferences", jsonData);
+    } catch (error) {
+      Alert.alert("Some error occured!", "Error saving user preferences.");
+    }
+  }
+
   return (
-    <OnboardingScreenLayout nextScreen={"/"} buttonText="Finish">
+    <OnboardingScreenLayout
+      nextScreen={"/(tabs)"}
+      buttonText="Finish"
+      last={true}
+      onNext={saveUserPreferences}
+    >
       <BackButton />
       <MascotImage path={mascotImage} />
       <OnboardingTitle className="mb-4">You’re all set 💧</OnboardingTitle>
@@ -26,11 +60,15 @@ export default function Last() {
         <Text className="text-muted text-lg mb-4">
           your Daily water intake amount is
         </Text>
-        <Text className="text-accent text-4xl font-bold">
-          {dailyIntakeAmount} {units.water}
-        </Text>
+        {loading ? (
+          <ActivityIndicator size={30} />
+        ) : (
+          <Text className="text-accent text-4xl font-bold">
+            {dailyWaterIntakeAmount} {units.water}
+          </Text>
+        )}
       </View>
-      <OnboardingSubtitle className="mb-4">
+      <OnboardingSubtitle className="mb-4 text-center">
         We’ll gently remind you to drink water throughout the day — no pressure,
         no spam.
       </OnboardingSubtitle>

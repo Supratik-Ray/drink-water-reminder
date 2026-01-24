@@ -22,7 +22,7 @@ export default function Weight() {
       <BackButton />
       <MascotImage path={mascotImage} />
       <OnboardingTitle className="mb-4">What’s your weight?</OnboardingTitle>
-      <OnboardingSubtitle className="mb-4">
+      <OnboardingSubtitle className="mb-8 text-center">
         This helps us calculate how much water your body needs each day.
       </OnboardingSubtitle>
       <TextInput

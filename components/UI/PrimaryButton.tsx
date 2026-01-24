@@ -2,7 +2,7 @@ import { cn } from "@/utils/cn";
 import { Pressable, Text } from "react-native";
 
 type PrimaryButtonProp = {
-  children: string;
+  children: React.ReactNode;
   onPress?: () => void;
   className?: string;
 };
