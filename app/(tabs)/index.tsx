@@ -1,37 +1,48 @@
+import BottomSheetContainer from "@/components/home/BottomSheetContainer";
 import CircularProgress from "@/components/home/CircularProgressBar";
+import WaterContainerList from "@/components/home/WaterContainerList";
+import WaterRecordList from "@/components/home/WaterRecordList";
 import FloatingActionButton from "@/components/UI/FloatingActionButton";
 import PrimaryButton from "@/components/UI/PrimaryButton";
 import Screen from "@/components/UI/Screen";
-import { waterContainers } from "@/utils/icons";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { useCallback, useRef, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { useTodayWaterRecords } from "@/hooks/useTodayWaterRecords";
+import { useAppSelector } from "@/store/hooks";
+import { totalWaterIntake } from "@/utils/water-intake";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { useRef, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function index() {
+  const {
+    records: todayRecords,
+    isFetching,
+    addRecord,
+  } = useTodayWaterRecords();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [current, setCurrent] = useState(500);
-  // ref
-  const bottomSheetRef = useRef<BottomSheet>(null);
 
-  // callbacks
-  const handleSheetChanges = useCallback((index: number) => {
-    if (index >= 0) {
-      setIsSheetOpen(true);
-    } else {
-      setIsSheetOpen(false);
-    }
-  }, []);
+  const { units, waterContainerId, dailyWaterIntakeAmount } = useAppSelector(
+    (state) => state.userPreference,
+  );
 
+  // bottomsheet-ref
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+
+  if (isFetching) {
+    return (
+      <Screen className="justify-center items-center">
+        <ActivityIndicator size={24} />
+      </Screen>
+    );
+  }
   return (
     <Screen>
       <GestureHandlerRootView className="flex-1">
         <View className="items-center mb-10 relative mt-20">
           <View className="mb-8">
             <CircularProgress
-              current={current}
-              goal={2500}
+              current={totalWaterIntake(todayRecords, units.water)}
+              goal={dailyWaterIntakeAmount!}
               unit="ml"
               size={300}
               strokeWidth={25}
@@ -41,68 +52,29 @@ export default function index() {
             />
           </View>
 
-          <PrimaryButton>Drink water</PrimaryButton>
+          <PrimaryButton onPress={() => addRecord(waterContainerId)}>
+            Drink water
+          </PrimaryButton>
+
           <FloatingActionButton
             icon="swap-horizontal"
             color="white"
             size={20}
-            onPress={() => {
-              if (!isSheetOpen) {
-                bottomSheetRef.current?.snapToIndex(0);
-                return;
-              } else {
-                bottomSheetRef.current?.close();
-              }
-            }}
+            onPress={() => bottomSheetRef.current?.present()}
           />
         </View>
-        <Text className="text-muted text-lg">Water logs</Text>
-        <View className="flex-1">
-          <ScrollView>
-            <View className="flex-row justify-between"></View>
-          </ScrollView>
+        <View className="px-10 flex-1 mb-15">
+          <Text className="text-muted font-bold text-lg mb-8">
+            Today's Records
+          </Text>
+          <WaterRecordList todayRecords={todayRecords} />
         </View>
-        <BottomSheet
-          ref={bottomSheetRef}
-          onChange={handleSheetChanges}
-          index={-1}
-          enablePanDownToClose
-          detached
-          snapPoints={["50%", "60%"]}
-          enableDynamicSizing={false}
-          bottomInset={1}
-          backgroundStyle={{
-            backgroundColor: "#1E293B",
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-          }}
-          handleIndicatorStyle={{
-            backgroundColor: "#94A3B8",
-          }}
-        >
-          <BottomSheetView className="flex-1 p-10 items-center">
-            <View className="flex-row flex-wrap gap-10 justify-start w-[300px]">
-              {waterContainers.map((container) => (
-                <View
-                  key={container.id}
-                  className="items-center p-3 w-50  gap-2"
-                >
-                  <container.Icon
-                    fill={"#3B82F6"}
-                    height={40}
-                    width={40}
-                    color={"#3B82F6"}
-                  />
-                  <Text className="text-white">{container.ml} ml</Text>
-                </View>
-              ))}
-              <View className="gap-2 items-center p-3">
-                <Ionicons name="add-circle" size={40} color={"#3B82F6"} />
-                <Text className="text-white">Custom</Text>
-              </View>
-            </View>
-          </BottomSheetView>
-        </BottomSheet>
+        <BottomSheetContainer bottomSheetRef={bottomSheetRef}>
+          <Text className="text-lg mb-8 text-white font-bold">
+            Switch Container
+          </Text>
+          <WaterContainerList />
+        </BottomSheetContainer>
       </GestureHandlerRootView>
     </Screen>
   );

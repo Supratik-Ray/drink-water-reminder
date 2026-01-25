@@ -5,7 +5,7 @@ import OnboardingSubtitle from "@/components/onboarding/OnboardingSubtitle";
 import OnboardingTitle from "@/components/onboarding/OnboardingTitle";
 import { addWaterIntakeAmount } from "@/store/features/user-preference";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { calculateDailyWaterIntake } from "@/utils/daily-intake-amount";
+import { calculateDailyWaterIntake } from "@/utils/water-intake";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Text, View } from "react-native";

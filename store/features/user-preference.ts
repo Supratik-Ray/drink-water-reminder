@@ -5,6 +5,7 @@ export type userPreferenceState = {
   weight: string;
   schedule: { wakeUpTime: string; sleepTime: string };
   dailyWaterIntakeAmount: number | null;
+  waterContainerId: string;
 };
 
 const initialState: userPreferenceState = {
@@ -12,6 +13,7 @@ const initialState: userPreferenceState = {
   weight: "",
   schedule: { wakeUpTime: "09:00", sleepTime: "23:00" },
   dailyWaterIntakeAmount: 0,
+  waterContainerId: "small-cup",
 };
 
 const userPreferenceSlice = createSlice({
@@ -19,7 +21,7 @@ const userPreferenceSlice = createSlice({
   initialState,
   reducers: {
     initState: (state, action: PayloadAction<userPreferenceState>) => {
-      state = action.payload;
+      return { ...state, ...action.payload };
     },
     changeUnits: (
       state,
@@ -52,6 +54,9 @@ const userPreferenceSlice = createSlice({
     addWaterIntakeAmount: (state, action: PayloadAction<number>) => {
       state.dailyWaterIntakeAmount = action.payload;
     },
+    changeWaterContainer: (state, action: PayloadAction<string>) => {
+      state.waterContainerId = action.payload;
+    },
   },
 });
 
@@ -61,6 +66,7 @@ export const {
   changeSchedule,
   changeWeight,
   addWaterIntakeAmount,
+  changeWaterContainer,
 } = userPreferenceSlice.actions;
 
 export default userPreferenceSlice.reducer;

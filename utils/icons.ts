@@ -1,10 +1,10 @@
 import Bottle from "@/assets/icons/bottle.svg";
 import CoffeeCup from "@/assets/icons/coffeeCup.svg";
-import Cup from "@/assets/icons/cup.svg";
 import FancyGlass from "@/assets/icons/fancyGlass.svg";
 import Glass from "@/assets/icons/glass.svg";
 import Mug from "@/assets/icons/mug.svg";
 import RoundedCup from "@/assets/icons/roundedCup.svg";
+import Cup from "@/assets/icons/smol-cup.svg";
 
 import { SvgProps } from "react-native-svg";
 
