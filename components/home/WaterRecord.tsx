@@ -3,9 +3,15 @@ import { useAppSelector } from "@/store/hooks";
 import { waterContainers } from "@/utils/icons";
 import { timestampToTimeString } from "@/utils/time";
 import React from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
-export default function WaterRecord({ record }: { record: WaterIntakeRow }) {
+export default function WaterRecord({
+  record,
+  onPress,
+}: {
+  record: WaterIntakeRow;
+  onPress: () => void;
+}) {
   const { units } = useAppSelector((state) => state.userPreference);
   const selectedContainer = waterContainers.find(
     (container) => container.id === record["container_id"],
@@ -13,7 +19,10 @@ export default function WaterRecord({ record }: { record: WaterIntakeRow }) {
 
   const IconComponent = selectedContainer!.Icon;
   return (
-    <View className="flex-row items-center justify-between mb-8 bg-surface p-5 rounded-md">
+    <Pressable
+      onPress={onPress}
+      className="flex-row items-center justify-between mb-8 bg-surface p-5 rounded-md"
+    >
       <View>
         <IconComponent
           color={"#3B82F6"}
@@ -28,6 +37,6 @@ export default function WaterRecord({ record }: { record: WaterIntakeRow }) {
       <Text className="text-muted">
         {timestampToTimeString(record.timestamp)}
       </Text>
-    </View>
+    </Pressable>
   );
 }

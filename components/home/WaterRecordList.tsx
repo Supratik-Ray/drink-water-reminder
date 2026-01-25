@@ -1,14 +1,14 @@
 import { WaterIntakeRow } from "@/db/databaseUtils";
-import { waterContainers } from "@/utils/icons";
-import { timestampToTimeString } from "@/utils/time";
 import React from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList } from "react-native";
 import WaterRecord from "./WaterRecord";
 
 export default function WaterRecordList({
   todayRecords,
+  pressItemHandler,
 }: {
   todayRecords: WaterIntakeRow[];
+  pressItemHandler: (id: string) => void;
 }) {
   return (
     <FlatList
@@ -16,7 +16,12 @@ export default function WaterRecordList({
       renderItem={(data) => {
         const record = data.item;
 
-        return <WaterRecord record={record} />;
+        return (
+          <WaterRecord
+            record={record}
+            onPress={() => pressItemHandler(record.id)}
+          />
+        );
       }}
     />
   );

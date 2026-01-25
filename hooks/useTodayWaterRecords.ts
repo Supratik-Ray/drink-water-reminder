@@ -1,4 +1,5 @@
 import {
+  deleteWaterRecord,
   getTodayRecords,
   insertWaterRecord,
   WaterIntakeRow,
@@ -38,5 +39,10 @@ export function useTodayWaterRecords() {
     });
   }
 
-  return { records, isFetching, addRecord };
+  function deleteRecord(recordId: string) {
+    setRecords((records) => records.filter((record) => record.id !== recordId));
+    deleteWaterRecord(recordId);
+  }
+
+  return { records, isFetching, addRecord, deleteRecord };
 }

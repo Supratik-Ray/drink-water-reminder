@@ -39,3 +39,20 @@ export async function getTodayRecords() {
   );
   return records;
 }
+
+export async function deleteWaterRecord(id: string) {
+  const db = await getDb();
+  await db.runAsync("DELETE FROM water_intake WHERE id = ?", [id]);
+}
+
+export async function updateWaterRecord(
+  id: string,
+  container_id: string,
+  timestamp: number,
+) {
+  const db = await getDb();
+  await db.runAsync(
+    "UPDATE water_intake SET container_id = ? , timestamp = ? WHERE id = ?",
+    [container_id, timestamp, id],
+  );
+}
