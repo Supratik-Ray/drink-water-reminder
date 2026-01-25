@@ -3,12 +3,14 @@ import MascotImage from "@/components/onboarding/MascotImage";
 import OnboardingScreenLayout from "@/components/onboarding/OnboardingScreenLayout";
 import OnboardingSubtitle from "@/components/onboarding/OnboardingSubtitle";
 import OnboardingTitle from "@/components/onboarding/OnboardingTitle";
-import { addWaterIntakeAmount } from "@/store/features/user-preference";
+import {
+  addWaterIntakeAmount,
+  completeOnboarding,
+} from "@/store/features/user-preference";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { calculateDailyWaterIntake } from "@/utils/water-intake";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 
 const mascotImage = require("../../assets/images/mascot/last.png");
 
@@ -31,18 +33,8 @@ export default function Last() {
     });
   }, []);
 
-  async function saveUserPreferences() {
-    try {
-      const jsonData = JSON.stringify({
-        units,
-        weight,
-        schedule,
-        dailyWaterIntakeAmount,
-      });
-      AsyncStorage.setItem("user-preferences", jsonData);
-    } catch (error) {
-      Alert.alert("Some error occured!", "Error saving user preferences.");
-    }
+  async function handleCompleteOnboarding() {
+    dispatch(completeOnboarding());
   }
 
   return (
@@ -50,7 +42,7 @@ export default function Last() {
       nextScreen={"/(tabs)"}
       buttonText="Finish"
       last={true}
-      onNext={saveUserPreferences}
+      onNext={handleCompleteOnboarding}
     >
       <BackButton />
       <MascotImage path={mascotImage} />

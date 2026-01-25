@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type userPreferenceState = {
+  isOnboarded: boolean;
   units: { water: "ml" | "oz"; weight: "kg" | "lb" };
   weight: string;
   schedule: { wakeUpTime: string; sleepTime: string };
@@ -9,6 +10,7 @@ export type userPreferenceState = {
 };
 
 const initialState: userPreferenceState = {
+  isOnboarded: false,
   units: { water: "ml", weight: "kg" },
   weight: "",
   schedule: { wakeUpTime: "09:00", sleepTime: "23:00" },
@@ -20,6 +22,9 @@ const userPreferenceSlice = createSlice({
   name: "userPreference",
   initialState,
   reducers: {
+    completeOnboarding: (state) => {
+      state.isOnboarded = true;
+    },
     initState: (state, action: PayloadAction<userPreferenceState>) => {
       return { ...state, ...action.payload };
     },
@@ -67,6 +72,7 @@ export const {
   changeWeight,
   addWaterIntakeAmount,
   changeWaterContainer,
+  completeOnboarding,
 } = userPreferenceSlice.actions;
 
 export default userPreferenceSlice.reducer;

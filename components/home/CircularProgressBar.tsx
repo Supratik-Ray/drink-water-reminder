@@ -1,5 +1,8 @@
-import { Text, View } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { Animated, Text, View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 type Props = {
   current: number;
@@ -9,8 +12,8 @@ type Props = {
   color?: string;
   unit?: string;
 
-  valueTextSize?: number; // 👈 main number
-  unitTextSize?: number; // 👈 secondary text
+  valueTextSize?: number;
+  unitTextSize?: number;
 };
 
 export default function CircularProgress({
@@ -24,11 +27,26 @@ export default function CircularProgress({
   valueTextSize = 24,
   unitTextSize = 14,
 }: Props) {
-  const progress = Math.min((current / goal) * 100, 100);
+  const progress = Math.min(current / goal, 1);
 
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const strokeOffset = circumference - (progress / 100) * circumference;
+
+  // Animated value (0 → 1)
+  const animatedProgress = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(animatedProgress, {
+      toValue: progress,
+      duration: 600,
+      useNativeDriver: false, // 👈 required for SVG props
+    }).start();
+  }, [progress]);
+
+  const strokeDashoffset = animatedProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [circumference, 0],
+  });
 
   return (
     <View style={{ width: size, height: size }}>
@@ -43,8 +61,8 @@ export default function CircularProgress({
           strokeWidth={strokeWidth}
         />
 
-        {/* Progress ring */}
-        <Circle
+        {/* Animated progress ring */}
+        <AnimatedCircle
           stroke={color}
           fill="none"
           cx={size / 2}
@@ -52,7 +70,7 @@ export default function CircularProgress({
           r={radius}
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
-          strokeDashoffset={strokeOffset}
+          strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
           rotation="-90"
           origin={`${size / 2}, ${size / 2}`}

@@ -2,9 +2,9 @@ import BottomSheetContainer from "@/components/home/BottomSheetContainer";
 import CircularProgress from "@/components/home/CircularProgressBar";
 import WaterContainerList from "@/components/home/WaterContainerList";
 import WaterRecordList from "@/components/home/WaterRecordList";
-import FloatingActionButton from "@/components/UI/FloatingActionButton";
 import PrimaryButton from "@/components/UI/PrimaryButton";
 import Screen from "@/components/UI/Screen";
+import SwitchContainerButton from "@/components/UI/SwitchContainerButton";
 import { useTodayWaterRecords } from "@/hooks/useTodayWaterRecords";
 import { useAppSelector } from "@/store/hooks";
 import { totalWaterIntake } from "@/utils/water-intake";
@@ -56,10 +56,7 @@ export default function index() {
             Drink water
           </PrimaryButton>
 
-          <FloatingActionButton
-            icon="swap-horizontal"
-            color="white"
-            size={20}
+          <SwitchContainerButton
             onPress={() => bottomSheetRef.current?.present()}
           />
         </View>
