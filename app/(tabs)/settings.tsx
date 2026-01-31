@@ -2,13 +2,16 @@ import SettingHeader from "@/components/settings/SettingHeader";
 import SettingItem from "@/components/settings/SettingItem";
 import SettingsContainer from "@/components/settings/SettingsContainer";
 import Screen from "@/components/UI/Screen";
+import { removeAllReminders } from "@/lib/notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import { Alert, StyleSheet } from "react-native";
 
 export default function settings() {
   async function onReset() {
+    console.log("woekinf");
     await AsyncStorage.clear();
+    await removeAllReminders();
     Alert.alert("Success!", "App completely reset!");
   }
   return (
@@ -37,7 +40,7 @@ export default function settings() {
       {/*other*/}
       <SettingsContainer border={false}>
         <SettingHeader icon="ellipsis-horizontal-outline">Other</SettingHeader>
-        <SettingItem label="Reset data" onPress={() => {}} />
+        <SettingItem label="Reset data" onPress={onReset} />
         <SettingItem label="Feedback" onPress={() => {}} />
         {/* <SettingItem label="Share" onPress={() => {}} /> */}
         <SettingItem label="Privacy policy" onPress={() => {}} />

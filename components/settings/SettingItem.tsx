@@ -13,11 +13,13 @@ export default function SettingItem({
   onPress,
 }: SettingItemProp) {
   if (!value) {
-    <View className="flex-row justify-between my-6">
-      <Pressable onPress={onPress}>
-        <Text className="text-white">{label}</Text>
-      </Pressable>
-    </View>;
+    return (
+      <View className="flex-row justify-between my-6">
+        <Pressable onPress={onPress}>
+          <Text className="text-white">{label}</Text>
+        </Pressable>
+      </View>
+    );
   }
 
   return (

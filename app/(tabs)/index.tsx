@@ -7,10 +7,15 @@ import PrimaryButton from "@/components/UI/PrimaryButton";
 import Screen from "@/components/UI/Screen";
 import SwitchContainerButton from "@/components/UI/SwitchContainerButton";
 import { useTodayWaterRecords } from "@/hooks/useTodayWaterRecords";
+import {
+  hasScheduledReminders,
+  requestNotificationPermission,
+  scheduleWaterReminder,
+} from "@/lib/notifications";
 import { useAppSelector } from "@/store/hooks";
 import { totalWaterIntake } from "@/utils/water-intake";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 
 //TODO: refetch waterrecords at midnight
@@ -27,6 +32,25 @@ export default function index() {
   const { units, waterContainerId, dailyWaterIntakeAmount } = useAppSelector(
     (state) => state.userPreference,
   );
+
+  useEffect(() => {
+    (async function () {
+      //if scheduled reminders return
+      const hasReminders = await hasScheduledReminders();
+      if (hasReminders) return;
+
+      //if no reminders set, then request for permission to set reminders
+      const hasPermission = await requestNotificationPermission();
+
+      if (!hasPermission) return;
+
+      //if permission given then set reminders
+      await Promise.all([
+        scheduleWaterReminder(13, 30),
+        scheduleWaterReminder(13, 32),
+      ]);
+    })();
+  }, []);
 
   // bottomsheet-ref
   const bottomSheetRef = useRef<BottomSheetModal>(null);

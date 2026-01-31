@@ -1,3 +1,4 @@
+//for user schedule
 export function timeStringToDate(timeString: string): Date {
   const [hours, minutes] = timeString.split(":").map(Number);
 
@@ -14,6 +15,7 @@ export function dateToTimeString(date: Date): string {
   return `${hours}:${minutes}`;
 }
 
+//for user record timing
 export function timestampToTimeString(timestamp: number) {
   const date = new Date(timestamp);
   const hours = date.getHours();

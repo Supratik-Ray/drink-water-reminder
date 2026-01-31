@@ -1,4 +1,5 @@
 import { initDb } from "@/db/databaseUtils";
+import { setNotificationHandler } from "@/lib/notifications";
 import { initState } from "@/store/features/user-preference";
 import { store } from "@/store/store";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -13,17 +14,16 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [isReady, setIsReady] = useState(false);
-  const [hasSavedPreferences, setHasSavedPreferences] = useState(false);
 
   useEffect(() => {
     async function init() {
       try {
+        setNotificationHandler();
         await initDb();
         const jsonData = await AsyncStorage.getItem("user-preferences");
         if (!jsonData) return;
         const userPreferences = JSON.parse(jsonData);
         store.dispatch(initState(userPreferences));
-        setHasSavedPreferences(true);
       } catch (error) {
         console.warn("error initializing app!");
       } finally {
@@ -47,18 +47,15 @@ export default function RootLayout() {
         <BottomSheetModalProvider>
           <Stack
             screenOptions={{
+              headerShown: false,
               contentStyle: {
                 backgroundColor: "#0F172A",
               },
             }}
           >
-            {!hasSavedPreferences && (
-              <Stack.Screen
-                name="(onboarding)"
-                options={{ headerShown: false }}
-              />
-            )}
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="index" />
+            <Stack.Screen name="(onboarding)" />
+            <Stack.Screen name="(tabs)" />
           </Stack>
         </BottomSheetModalProvider>
       </GestureHandlerRootView>
